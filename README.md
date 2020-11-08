@@ -32,7 +32,7 @@ Check pictures on thingiverse: http://www.thingiverse.com/thing:2245493
 
 Install the plugin using the Plugin Manager bundled with OctoPrint, you can search for the Enclosure plugin or just use the url: https://github.com/vitormhenrique/OctoPrint-Enclosure/archive/master.zip.
 
-To control the encosure temperature or get temperature trigged events, you need to install and configure a temperature sensor. This plugin can support DHT11, DHT22, AM2302, DS18B20, SI7021, BME280 and TMP102 temperature sensors.
+To control the encosure temperature or get temperature trigged events, you need to install and configure a temperature sensor. This plugin can support DHT11, DHT22, AM2302, DS18B20, SI7021, SHT30, BME280 and TMP102 temperature sensors.
 
 * For the DHT11, DHT22 and AM2302 follow this steps:
 
@@ -86,7 +86,7 @@ The response will either have YES or NO at the end of the first line. If it is y
 
 Copy the serial number, you will need to configure the plugin.  Note that for the serial number includes the 28-, for example 28-0000069834ff.
 
-* For the SI7021, BME280, TMP102 and MCP9808 sensors
+* For the SI7021, SHT30, BME280, TMP102 and MCP9808 sensors
 
 Enable I2C on your raspberry pi, depending on raspi-config version, step by step can be different:
 

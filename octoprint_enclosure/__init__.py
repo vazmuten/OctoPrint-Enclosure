@@ -801,6 +801,8 @@ class EnclosurePlugin(octoprint.plugin.StartupPlugin, octoprint.plugin.TemplateP
                     temp, hum = self.read_am2320_temp() # sensor has fixed address
                 elif sensor['temp_sensor_type'] == "si7021":
                     temp, hum = self.read_si7021_temp(sensor['temp_sensor_address'], sensor['temp_sensor_i2cbus'])
+                elif sensor['temp_sensor_type'] == "sht30":
+                    temp, hum = self.read_sht30_temp(sensor['temp_sensor_address'], sensor['temp_sensor_i2cbus'])
                 elif sensor['temp_sensor_type'] == "tmp102":
                     temp = self.read_tmp102_temp(sensor['temp_sensor_address'])
                     hum = 0
@@ -951,6 +953,27 @@ class EnclosurePlugin(octoprint.plugin.StartupPlugin, octoprint.plugin.TemplateP
         except Exception as ex:
             self._logger.info(
                 "Failed to execute python scripts, try disabling use SUDO on advanced section of the plugin.")
+            self.log_error(ex)
+            return (0, 0)
+
+    def read_sht30_temp(self, address, i2cbus):
+        try:
+            script = os.path.dirname(os.path.realpath(__file__)) + "/SHT30.py "
+            if self._settings.get(["use_sudo"]):
+                sudo_str = "sudo "
+            else:
+                sudo_str = ""
+            cmd = sudo_str + "python " + script + str(address) + " " + str(i2cbus)
+            if  self._settings.get(["debug_temperature_log"]) is True:
+                self._logger.debug("Temperature SHT30 cmd: %s", cmd)
+            stdout = (Popen(cmd, shell=True, stdout=PIPE).stdout).read()
+            if  self._settings.get(["debug_temperature_log"]) is True:
+                self._logger.debug("SHT30 result: %s", stdout)
+            temp, hum = stdout.decode().split("|")
+            return (self.to_float(temp.strip()), self.to_float(hum.strip()))
+        except Exception as ex:
+            self._logger.info(
+                "SHT Failed to execute python scripts, try disabling use SUDO on advanced section of the plugin.")
             self.log_error(ex)
             return (0, 0)
 
